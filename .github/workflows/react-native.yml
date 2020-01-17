@@ -19,7 +19,7 @@ jobs:
     - name: npm install
       run: |
         npm install
-    - name: Fill keystore key
+    - name: create keystore file, fill key
       run: |
         CURPWD=$(pwd)
         echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > keystore.jks
@@ -28,9 +28,6 @@ jobs:
         echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}" >> android/gradle.properties
         echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ALIAS }}" >> android/gradle.properties
         echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> android/gradle.properties
-    - name: npm build
-      run: |
-        npm run build --if-present
     - name: Build apk package
       working-directory: ./android
       run: |
