@@ -1,10 +1,10 @@
---- node_modules/react-native/React/Base/RCTModuleMethod.mm	2020-02-03 16:28:05.000000000 +0900
-+++ node_modules/react-native/React/Base/RCTModuleMethod.mm.patch	2020-02-03 16:19:44.000000000 +0900
+--- node_modules/react-native/React/Base/RCTModuleMethod.mm	1985-10-26 17:15:00.000000000 +0900
++++ node_modules/react-native/React/Base/RCTModuleMethod.mm.patch	2020-02-03 16:42:58.000000000 +0900
 @@ -91,6 +91,7 @@
  static BOOL RCTParseUnused(const char **input)
  {
-   return RCTReadString(input, "__attribute__((unused))") ||
+   return RCTReadString(input, "__unused") ||
 +         RCTReadString(input, "__attribute__((__unused__))") ||
-          RCTReadString(input, "__unused");
+          RCTReadString(input, "__attribute__((unused))");
  }
  
