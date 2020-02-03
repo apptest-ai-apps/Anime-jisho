@@ -23,6 +23,9 @@ jobs:
     - name: npm install
       run: |
         npm install
+    - name: patch react-native xcode 11 build bug
+      run: |
+        patch -u node_modules/react-native/React/Base/RCTModuleMethod.mm -i fix-xcode-11-build.patch
     - name: Build development package using fastlane
       working-directory: ./ios
       env:
