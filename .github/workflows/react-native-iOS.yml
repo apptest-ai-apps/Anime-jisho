@@ -43,5 +43,5 @@ jobs:
       uses: forcemax/apptestai-test@v1
       with:
         accesskey: ${{ secrets.APPTESTAI_KEY }}
-        projectid: 1089
+        projectid: 1102
         packagefile: ios/anime_jisho.ipa
