@@ -42,6 +42,6 @@ jobs:
     - name: Test app on apptest.ai
       uses: forcemax/apptestai-test@v1
       with:
-        accesskey: ${{ secrets.APPTESTAI_KEY }}
-        projectid: 1102
-        packagefile: ios/anime_jisho.ipa
+        access_key: ${{ secrets.APPTEST_AI_ACCESS_KEY }}
+        project_id: 1102
+        binary_path: ios/anime_jisho.ipa
