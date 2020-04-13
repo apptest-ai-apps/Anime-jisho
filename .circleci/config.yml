@@ -1,0 +1,43 @@
+version: 2.1
+orbs:
+  apptest-ai: apptestai/android-app-test@volatile
+
+jobs:
+  build-android:
+    environment:
+      JVM_OPTS: -Xmx1536m
+      GRADLE_OPTS: "-XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.jvmargs=-Xmx1536m -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false"
+    docker:
+      - image: circleci/android:api-29-node
+    steps:
+      - checkout
+      - run:
+          name: npm install
+          command: npm install
+      - run:
+          name: create keystore file, fill key
+          command: |
+            CURPWD=$(pwd)
+            echo "$SIGNING_KEY" | base64 --decode > keystore.jks
+            echo "" >> android/gradle.properties
+            echo "MYAPP_UPLOAD_STORE_FILE=${CURPWD}/keystore.jks" >> android/gradle.properties
+            echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEY_STORE_PASSWORD" >> android/gradle.properties
+            echo "MYAPP_UPLOAD_KEY_ALIAS=$ALIAS" >> android/gradle.properties
+            echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> android/gradle.properties
+      - run:
+          name: Run build
+          working_directory: ./android
+          command: ./gradlew assembleRelease
+      - apptest-ai/run-test:
+          binary_path: "android/app/build/outputs/apk/release/app-release.apk"
+          project_id: "1103"
+      - store_artifacts:
+          path: test-results
+      - store_test_results:
+          path: test-results
+
+
+workflows:
+    build:
+      jobs:
+        - build-android
