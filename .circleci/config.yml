@@ -36,8 +36,32 @@ jobs:
       - store_test_results:
           path: test-results
 
+  build-ios:
+    macos:
+      xcode: 11.3.1
+    steps:
+      - checkout
+      - run:
+          name: npm install 
+          command: npm install 
+      - run:
+          name: patch react-native xcode 11 build bug 
+          command: patch -u node_modules/react-native/React/Base/RCTModuleMethod.mm -i fix-xcode-11-build.patch
+      - run:
+          name: build
+          working_directory: ./ios
+          command: |
+            fastlane beta
+      - apptest-ai/run-test:
+          binary_path: "ios/anime_jisho.ipa"
+          project_id: "1102"
+      - store_artifacts:
+          path: test-results
+      - store_test_results:
+          path: test-results
 
 workflows:
     build:
       jobs:
         - build-android
+        - build-ios
